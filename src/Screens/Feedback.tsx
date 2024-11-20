@@ -1,63 +1,57 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { ActivityIndicator, Animated, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { ScreenParamList } from '../App';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import FeedbackCard from '../Components/FeedbackCard';
+import { Comment } from '../Context';
+import { domain } from '../constants';
 
-export default function Feedback() {
-    const comments = [
-        {
-            name: "John Doe",
-            profilePic: "https://example.com/john-profile.jpg",
-            comment: "This is a really insightful post. Thanks for sharing!"
-        },
-        {
-            name: "Jane Smith",
-            profilePic: "https://example.com/jane-profile.jpg",
-            comment: "I totally agree with the points made in this article."
-        },
-        {
-            name: "Alex Johnson",
-            profilePic: "https://example.com/alex-profile.jpg",
-            comment: "Great read! I learned a lot from this."
-        },
-        {
-            name: "Emily Davis",
-            profilePic: "https://example.com/emily-profile.jpg",
-            comment: "Thanks for posting this. Looking forward to more content!"
-        },
-        {
-            name: "Michael Brown",
-            profilePic: "https://example.com/michael-profile.jpg",
-            comment: "This helped clarify some things I was confused about."
+type FeedbackScreenNavigationProp = NativeStackScreenProps<ScreenParamList, "Feedback">
+
+export default function Feedback({navigation, route}: FeedbackScreenNavigationProp) {
+    const [allComments, setAllComments] = useState<Comment[]>([])
+    const [loading, setLoading] = useState<boolean>(true)
+    const [openMenuId, setOpenMenuId] = useState<null | string>(null); // Track which menu is open
+    const [fadeAnim] = useState(new Animated.Value(0)); // Default opacity for menus
+
+    const toggleMenu = (id: string) => {
+        setOpenMenuId(openMenuId === id ? null : id);
+    };
+    useEffect(() => {
+        console.log(openMenuId);
+        if (openMenuId !== null) {
+            Animated.timing(fadeAnim, {
+                toValue: 1, // Fade in when a menu is open
+                duration: 300,
+                useNativeDriver: true,
+            }).start();
+        } else {
+            Animated.timing(fadeAnim, {
+                toValue: 0, // Fade out when no menu is open
+                duration: 300,
+                useNativeDriver: true,
+            }).start();
         }
-    ];
+    }, [openMenuId]);
+
+    useEffect(() => {
+        fetch(`${domain}/comment/getComment/${route.params.stationId}`).then(res => res.json())
+        .then(data => {
+            setLoading(false)
+            setAllComments(data.data)
+        })
+    }, [])
+    
 
     return (
-        <View>
-            {comments.map((item, index: number) => (
-                <>
-                    <View key={item.name} style={{ flexDirection: "row", gap: 12, backgroundColor: "#e9ecef", borderRadius: 10, padding: 10, marginBottom: 5 }}>
-                        <View>
-                            <Image style={{ width: 42, height: 42, borderRadius: 1000, resizeMode: "contain" }} source={{ uri: "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg" }} />
-                        </View>
-                        <View>
-                            <Text style={[styles.text, { fontSize: 17, fontWeight: "500" }]}>{item.name} </Text>
-                            <Text style={[styles.text, { paddingRight: 40 }]}>{item.comment} </Text>
-                        </View>
-                    </View>
-                    {index == comments.length - 1 && (
-                        <TouchableOpacity onPress={() => { }}>
-                            <Text style={{ color: 'blue', textDecorationLine: 'underline' }}>
-                                Go to Example.com
-                            </Text>
-                        </TouchableOpacity>
-                    )}
-                </>
+        <View style={{paddingHorizontal: 10}}>
+            <Text style={{ fontWeight: "600", color: "#2196f3", fontSize: 27, marginTop: 29, marginLeft: 10, marginBottom: 15 }}>All Comments</Text>
+
+            {loading && <ActivityIndicator size={40} color={"#2196f3"} />}
+
+            {allComments.map((item, index: number) => (
+                <FeedbackCard setAllComments={setAllComments} fadeAnim={fadeAnim} openMenuId={openMenuId} toggleMenu={toggleMenu} key={item._id} item={item} inBottomSheet={false} />
             ))}
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    text: {
-        color: "black"
-    },
-})
