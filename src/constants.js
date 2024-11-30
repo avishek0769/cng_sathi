@@ -1,6 +1,6 @@
 import Geolocation from "@react-native-community/geolocation"
 
-export const domain = "http://192.168.1.37:3000"
+export const domain = "https://cngsathi.nexus-network.tech"
 
 export const getLocation = () => {
     return new Promise((resolve, reject) => {

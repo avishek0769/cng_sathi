@@ -25,8 +25,8 @@ export default function UpdateStatus({ navigation, route }: UpdateStatusScreenPa
     const [loading, setLoading] = useState(false)
 
     let trustScore = ((currentUser!.totalUpdates - currentUser!.falseUpdates) / currentUser!.totalUpdates) * 100
-    // let relevancy = (trustScore / 100) * 10;
-    let relevancy = 40;
+    let relevancy = (trustScore / 100) * 10;
+    currentUser!._id == "6735c539ed90e43dadb8e018" || currentUser!._id == "6735bae9917a8dde200b5f0d" || currentUser!._id == "67238454a299f27b9bd49e36"? relevancy = 25 : null;
 
     function generateTimeOptions() {
         const now = new Date();

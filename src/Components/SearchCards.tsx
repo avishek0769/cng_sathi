@@ -1,4 +1,4 @@
-import { Keyboard, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useContext } from 'react'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { AppContext } from '../Context';
@@ -8,9 +8,8 @@ type SearchStationParamList = {
         _id: string;
         name: string;
         location: {
-            lat: number;
-            lng: number;
-            _id: string;
+            type: string;
+            coordinates: number[];
         };
         place_id: string;
         vicinity: string;
@@ -20,11 +19,11 @@ type SearchStationParamList = {
 
 export default function SearchCards({station, setDrawerOpen}: SearchStationParamList) {
     const { mapRef } = useContext(AppContext)
-
+console.log(station);
     const handlePress = () => {
         mapRef?.current?.animateToRegion({
-            latitude: station.location.lat,
-            longitude: station.location.lng,
+            latitude: station.location.coordinates[1],
+            longitude: station.location.coordinates[0],
             latitudeDelta: 0.0022,
             longitudeDelta: 0.0022,
         }, 800)

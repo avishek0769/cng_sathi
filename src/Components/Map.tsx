@@ -88,7 +88,7 @@ export default function Map() {
     const MapMarker = ({ station }: MapMarker) => {
         if (visibleStation.length > 0 && visibleStation.includes(station._id)) {
             return (
-                <Marker anchor={{ x: 0.5, y: 0.5 }} style={{backgroundColor: "red", width: 100, height: 100}} onPress={() => handleBottomSheet(station._id)} coordinate={{ latitude: station.location.coordinates[1], longitude: station.location.coordinates[0] }} >
+                <Marker anchor={{ x: 0.5, y: 0.5 }} style={{width: 100, height: 100}} onPress={() => handleBottomSheet(station._id)} coordinate={{ latitude: station.location.coordinates[1], longitude: station.location.coordinates[0] }} >
                     <View style={styles.markerContainer}>
                         <View style={[styles.infoContainer, { backgroundColor: station.cng_available == 1 ? "#70e000" : (station.cng_available == 2 ? "#ffb703" : (station.cng_available == 3 ? "#ff4d6d" : "white")) }]}>
                             <Text style={styles.infoText}>Cars: {station.queue != "nil" ? station.queue : "--"}</Text>

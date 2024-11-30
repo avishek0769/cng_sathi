@@ -92,6 +92,15 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file(MYAPP_RELEASE_STORE_FILE)
+                storePassword nokia1234ABCD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword nokia1234ABCD
+            }
+        }
+
     }
     buildTypes {
         debug {

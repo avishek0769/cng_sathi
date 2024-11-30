@@ -442,18 +442,18 @@ export default function Home({ navigation, route }: HomeScreenNavigationProp) {
 
             {isDrawerOpen && (
                 <Animated.View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#fff', transform: [{ translateY: drawerTranslateY }], }}>
-                    <ScrollView style={{ flex: 1, borderRadius: 15, padding: 20, marginTop: 70, marginBottom: 20 }}>
+                    <ScrollView keyboardShouldPersistTaps={"handled"} style={{ flex: 1, borderRadius: 15, padding: 20, marginTop: 70, marginBottom: 20 }}>
                         {searchResults.length > 0 ? (
                             searchResults.map((item: any) => (
                                 <SearchCards setDrawerOpen={setDrawerOpen} station={item} key={item.place_id} />
                             ))
                         ) :
-                            (
-                                <View style={{ top: 140, left: "50%", transform: [{ translateX: -50 }], alignItems: "center", position: "absolute" }}>
-                                    <Text style={{ color: "#dee2e6", fontSize: 30, fontWeight: "600" }}>No result</Text>
-                                    <Icon name="cloud-off" size={70} color="#dee2e6" />
-                                </View>
-                            )}
+                        (
+                            <View style={{ top: 140, left: "50%", transform: [{ translateX: -50 }], alignItems: "center", position: "absolute" }}>
+                                <Text style={{ color: "#dee2e6", fontSize: 30, fontWeight: "600" }}>No result</Text>
+                                <Icon name="cloud-off" size={70} color="#dee2e6" />
+                            </View>
+                        )}
                     </ScrollView>
                 </Animated.View>
             )}
